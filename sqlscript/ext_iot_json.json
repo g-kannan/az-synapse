@@ -1,0 +1,17 @@
+{
+	"name": "ext_iot_json",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'raw_sadataengci_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [raw_sadataengci_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://raw@sadataengci.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE iot_json_ext (\n\t[battery_level] bigint,\n\t[c02_level] bigint,\n\t[cca2] nvarchar(4000),\n\t[cca3] nvarchar(4000),\n\t[cn] nvarchar(4000),\n\t[device_id] bigint,\n\t[device_name] nvarchar(4000),\n\t[humidity] bigint,\n\t[ip] nvarchar(4000),\n\t[latitude] float,\n\t[lcd] nvarchar(4000),\n\t[longitude] float,\n\t[scale] nvarchar(4000),\n\t[temp] bigint,\n\t[timestamp] bigint\n\t)\n\tWITH (\n\tLOCATION = 'iot_devices',\n\tDATA_SOURCE = [raw_sadataengci_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dbricks-syna",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

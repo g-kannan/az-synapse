@@ -1,0 +1,17 @@
+{
+	"name": "ReadDelta",
+	"properties": {
+		"content": {
+			"query": "CREATE EXTERNAL DATA SOURCE DeltaLakeStorage\nWITH ( LOCATION = 'https://sadataengci.dfs.core.windows.net/databricks-trial-demo/TEST-ADLS/' );\nGO;\n\nCREATE VIEW songs_ext_vw\nas\nSELECT TOP 100 *\nFROM OPENROWSET(\n        BULK 'songs-tbl',\n        DATA_SOURCE = 'DeltaLakeStorage',\n        FORMAT = 'delta'\n    ) as rows;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dbricks-syna",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
