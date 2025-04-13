@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "f9220306-220b-4112-a60a-8d69cf8fca65"
+				"spark.autotune.trackingId": "b18f5646-60bf-45ad-8e3a-995eb6474ca8"
 			}
 		},
 		"metadata": {
@@ -51,11 +51,27 @@
 			{
 				"cell_type": "code",
 				"source": [
+					"import json\n",
 					"from notebookutils import mssparkutils\n",
 					"conn = mssparkutils.credentials.getSecret('cikvdataeng' , 'eh-telco-secret')\n",
 					"print(conn)"
 				],
-				"execution_count": 28
+				"execution_count": 69
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"# Start from beginning of stream\n",
+					"startOffset = \"-1\"\n",
+					"# Create the positions\n",
+					"startingEventPosition = {\n",
+					"  \"offset\": startOffset,  \n",
+					"  \"seqNo\": -1,            #not in use\n",
+					"  \"enqueuedTime\": None,   #not in use\n",
+					"  \"isInclusive\": True\n",
+					"}"
+				],
+				"execution_count": 70
 			},
 			{
 				"cell_type": "code",
@@ -71,25 +87,35 @@
 					"\n",
 					"ehConf['eventhubs.consumerGroup'] = \"$Default\"\n",
 					"\n",
+					"# ehConf[\"eventhubs.startingPosition\"] = json.dumps(startingEventPosition)\n",
+					"# ehConf['eventhubs.startingPosition'] = \"@start\"\n",
+					"\n",
 					"# Encrypt ehConf connectionString property\n",
 					"\n",
 					"ehConf['eventhubs.connectionString'] = sc._jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(connectionString)"
 				],
-				"execution_count": 37
+				"execution_count": 85
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"event_hub_df = spark.readStream.format(\"eventhubs\").options(**ehConf).load()"
 				],
-				"execution_count": 38
+				"execution_count": 87
 			},
 			{
 				"cell_type": "code",
 				"source": [
 					"event_hub_df.schema"
 				],
-				"execution_count": 39
+				"execution_count": 81
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"# display(event_hub_df)"
+				],
+				"execution_count": 82
 			},
 			{
 				"cell_type": "code",
@@ -102,7 +128,7 @@
 					"\n",
 					"decoded_df = event_hub_df.select(F.col(\"body\").cast(\"string\").alias(\"decoded_body\"), \"enqueuedTime\")"
 				],
-				"execution_count": 40
+				"execution_count": 83
 			},
 			{
 				"cell_type": "code",
@@ -115,7 +141,7 @@
 					"    .option(\"checkpointLocation\", \"abfss://ucext@sadataengci.dfs.core.windows.net/synapse_spark_pool/telco_ingest_checkpoint/\") \\\n",
 					"    .start('abfss://ucext@sadataengci.dfs.core.windows.net/synapse_spark_pool/telco_ingest/')"
 				],
-				"execution_count": 41
+				"execution_count": 84
 			}
 		]
 	}
