@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "1b31e81a-0af0-45a8-83f9-280efb0c65b0"
+				"spark.autotune.trackingId": "7b029a0d-c886-4291-9a87-92705d061bc2"
 			}
 		},
 		"metadata": {
@@ -109,6 +109,18 @@
 					"df.write.format(\"delta\").save(\"abfss://ucext@sadataengci.dfs.core.windows.net/synapse_spark_pool/telco_copy\")"
 				],
 				"execution_count": 11
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"telco_copy_dt = DeltaTable.forPath(spark,\"abfss://ucext@sadataengci.dfs.core.windows.net/synapse_spark_pool/telco_copy\")\n",
+					"detailDF = telco_copy_dt.detail()\n",
+					"display(detailDF)"
+				],
+				"execution_count": 14
 			}
 		]
 	}
