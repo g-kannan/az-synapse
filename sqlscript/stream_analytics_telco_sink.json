@@ -1,0 +1,17 @@
+{
+	"name": "stream_analytics_telco_sink",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = DELTA)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'metastore-catalog_sadataengci_dfs_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [metastore-catalog_sadataengci_dfs_core_windows_net] \n\tWITH (\n\t\tLOCATION = 'abfss://metastore-catalog@sadataengci.dfs.core.windows.net' \n\t)\nGO\n\nCREATE EXTERNAL TABLE dbo.stream_analytics_telco (\n\t[TimeS] nvarchar(4000),\n\t[CallingCellID] nvarchar(4000),\n\t[CalledCellID] nvarchar(4000),\n\t[IncomingTrunk] nvarchar(4000),\n\t[CalledNum2] nvarchar(4000),\n\t[FCIFlag] nvarchar(4000),\n\t[RecordType] nvarchar(4000),\n\t[SystemIdentity] nvarchar(4000),\n\t[FileNum] nvarchar(4000),\n\t[SwitchNum] nvarchar(4000),\n\t[CallingNum] nvarchar(4000),\n\t[CallingIMSI] nvarchar(4000),\n\t[CalledNum] nvarchar(4000),\n\t[CalledIMSI] nvarchar(4000),\n\t[DateS] nvarchar(4000),\n\t[TimeType] bigint,\n\t[CallPeriod] bigint,\n\t[ServiceType] nvarchar(4000),\n\t[Transfer] bigint,\n\t[OutgoingTrunk] nvarchar(4000),\n\t[MSRN] nvarchar(4000),\n\t[callrecTime] nvarchar(4000),\n\t[EventProcessedUtcTime] datetime2(7),\n\t[PartitionId] bigint,\n\t[EventEnqueuedUtcTime] datetime2(7)\n\t)\n\tWITH (\n\tLOCATION = 'ucext/synapse_spark_pool/streamanalytics_telco_ingest/**',\n\tDATA_SOURCE = [metastore-catalog_sadataengci_dfs_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\n\nSELECT count(*) FROM dbo.stream_analytics_telco\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "dbricks-syna",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
