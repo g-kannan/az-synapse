@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "30bf2a6c-ff99-4e8a-8796-b1b0f9b879eb"
+				"spark.autotune.trackingId": "1b31e81a-0af0-45a8-83f9-280efb0c65b0"
 			}
 		},
 		"metadata": {
@@ -54,6 +54,61 @@
 					"pip install delta-spark"
 				],
 				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"from delta import DeltaTable"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"deltaTable = DeltaTable.forPath(spark, \"abfss://ucext@sadataengci.dfs.core.windows.net/raw/event_hub_data\")"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"fullHistoryDF = deltaTable.history() "
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"display(fullHistoryDF)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df = spark.read.format(\"delta\").load(\"abfss://ucext@sadataengci.dfs.core.windows.net/raw/event_hub_data\")"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"collapsed": false
+				},
+				"source": [
+					"df.count()"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"df.write.format(\"delta\").save(\"abfss://ucext@sadataengci.dfs.core.windows.net/synapse_spark_pool/telco_copy\")"
+				],
+				"execution_count": 11
 			}
 		]
 	}
