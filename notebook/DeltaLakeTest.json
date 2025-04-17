@@ -17,7 +17,7 @@
 				"spark.dynamicAllocation.enabled": "false",
 				"spark.dynamicAllocation.minExecutors": "2",
 				"spark.dynamicAllocation.maxExecutors": "2",
-				"spark.autotune.trackingId": "7b029a0d-c886-4291-9a87-92705d061bc2"
+				"spark.autotune.trackingId": "37f604e1-b4bd-48cf-8f41-bba4e3a2ff68"
 			}
 		},
 		"metadata": {
@@ -33,17 +33,10 @@
 			"a365ComputeOptions": {
 				"id": "/subscriptions/ec1b2421-3014-42bc-afc8-824cc0b3fc95/resourceGroups/rgdataeng/providers/Microsoft.Synapse/workspaces/synaci/bigDataPools/poc1",
 				"name": "poc1",
-				"type": "Spark",
-				"endpoint": "https://synaci.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/poc1",
 				"auth": {
 					"type": "AAD",
 					"authResource": "https://dev.azuresynapse.net"
-				},
-				"sparkVersion": "3.4",
-				"nodeCount": 3,
-				"cores": 4,
-				"memory": 28,
-				"automaticScaleJobs": false
+				}
 			},
 			"sessionKeepAliveTimeout": 30
 		},
@@ -51,7 +44,7 @@
 			{
 				"cell_type": "code",
 				"source": [
-					"pip install delta-spark"
+					"# pip install delta-spark"
 				],
 				"execution_count": 1
 			},
